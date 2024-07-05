@@ -1,0 +1,41 @@
+{%  extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+
+<section class="vh-50" style="background-color: hsl(0, 0%, 98%);">
+<form action="" method="POST">
+  {% csrf_token %}
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-20">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card shadow-2-strong" style="border-radius: 1rem;">
+          <div class="card-body p-5 text-center" >
+
+            <h3 class="mb-5">Sign in</h3>
+            {% for field in form %}
+            <div data-mdb-input-init class="form-outline mb-4">
+              {{ field }}
+              <label class="form-label" for="email">{{ field.label}}</label>
+            </div>
+            {% endfor %}
+            <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg btn-block"  type="submit">Login</button>
+            <div class="text-center">
+              
+              <p class="my-4 ">Forgot your password ? <a href="{% url 'password_reset' %}">Reset password</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </form>
+</section>
+
+
+
+
+
+
+
+{% endblock content %}

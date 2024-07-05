@@ -1,0 +1,45 @@
+{%  extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+
+<p>
+Cras accumsan quis metus a vestibulum. Duis vitae lectus mauris. Morbi interdum nibh sit amet urna mollis volutpat.
+Nullam in molestie tellus, imperdiet feugiat nunc. Fusce vel velit sit amet odio consectetur laoreet. 
+Praesent malesuada vel dolor eu consectetur. Phasellus a faucibus tellus. Maecenas gravida porta quam, et molestie libero faucibus non. 
+Nullam in rhoncus metus. Vivamus fermentum porta luctus. Donec sit amet lorem sed augue luctus iaculis. 
+Sed posuere risus in velit feugiat aliquet. 
+</p>
+<p>
+Suspendisse at commodo nibh, eu ullamcorper metus. Integer viverra pharetra urna, eget porta justo porttitor mollis. 
+Nam facilisis risus id dignissim viverra. Ut nec leo vitae tellus blandit euismod eu sed erat. 
+Donec eros ante, molestie sit amet vehicula facilisis, ultricies eget metus. 
+Nulla tincidunt ut lorem lobortis tincidunt. Aenean eros nibh, tempor vitae massa in, mattis tincidunt turpis. Nullam imperdiet a lorem sed mollis. 
+Nullam eu nisi elit. 
+Nunc commodo, velit cursus varius congue, nunc tortor semper leo, quis laoreet leo mi ac magna. 
+Etiam nunc erat, finibus quis augue non, laoreet tristique purus. 
+</p>
+
+<p>
+Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; 
+Curabitur rutrum vestibulum hendrerit. Nunc vitae velit ut risus fermentum molestie. 
+Morbi euismod libero id nisi convallis laoreet. 
+Praesent nunc lectus, tempor sit amet consequat quis, euismod sed sapien. 
+Phasellus feugiat in libero a sollicitudin. Aliquam erat volutpat. 
+
+</p>
+
+
+<hr>
+<h3 class="text-bold">Do you have questions ?</h3>
+{% include "store/messages.html" %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{form}}
+</br>
+ <button type="submit" class="btn btn-primary"> Send Question</button>
+  </form>
+
+{% endblock content %}

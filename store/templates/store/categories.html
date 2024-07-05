@@ -1,0 +1,58 @@
+{%  extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+
+
+
+<h3 class="text-center">Categories</h3>
+<hr>
+</br>
+<div class="row">
+{% for category in categories %}
+<div class="card" style="max-width: 400px;">
+  <img src="{{category.imageURL}}" class="card-img-top thumbnail" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">{{category.title}}</h5>
+    <p class="card-text">{{category.subtitle|truncatechars:50}}</p>
+    <hr>
+    <a class="btn btn-outline-success" href="{% url 'products' category.slug %}">
+    <i class="fa fa-eye fa-lg" aria-hidden="true"></i>
+
+    </a>
+    {% if request.user.is_superuser %}
+    <a class="btn btn-outline-warning" href="{% url 'modify_category' category.slug %}"> 
+    <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
+    </a>
+
+    <a class="btn btn-outline-danger" href="{% url 'delete_category' category.slug %}"> 
+    <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+    </a>
+
+    {% endif %}
+
+  </div>
+</div>
+{% endfor %}
+</div>
+
+
+</br>
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    {% if categories.has_previous %}
+    <li class="page-item"><a class="page-link" href="?page={{categories.previous_page_number}}">Previous</a></li>
+    {% endif%}
+    {% for page  in categories.paginator.page_range %}
+    <li class="page-item"><a class="page-link" href="?page={{page}}">{{page}}</a></li>
+    {% endfor %}
+    {% if categories.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{categories.next_page_number}}">Next</a></li>
+    {% endif %}
+  </ul>
+</nav>
+
+
+
+
+{% endblock content  %}

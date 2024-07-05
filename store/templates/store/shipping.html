@@ -1,0 +1,35 @@
+{%  extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="box-element" id="form-wrapper">
+            <form method="POST" action="."  class="w-full">
+            {% csrf_token %}
+               
+                <div id="user-info">
+                <hr>
+                    <p>Enter Shipping information:</p>
+                <hr>
+                {% for field in form %}
+                    <div class="form-field">
+                    <label>{{field.label}}:</label>
+                     {{field}}
+                    </div>
+                {% endfor  %}   
+                </div>
+                <hr>
+                 <button type="submit" class="btn btn-primary">Submit</button>
+                 <a  href={% url 'profile' %} class="btn btn-outline-secondary">
+                 <i class="fa fa-user" aria-hidden="true"></i>
+                 <span>Profile</span>
+                 </a>
+            </form>
+        </div>
+        
+
+        <br>   
+    </div>
+
+    {% endblock content %}

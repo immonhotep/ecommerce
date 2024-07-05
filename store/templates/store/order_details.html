@@ -1,0 +1,95 @@
+{%  extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+{% if request.user.is_superuser %}
+<div class="row">
+    
+    <div class="col-lg-6">
+        <div class="box-element" id="form-wrapper">
+            <form method="POST" action="."  class="w-full">
+            {% csrf_token %}
+               
+                <div id="user-info">
+                    <div class="row">
+                        <div class="col-sm">
+                            <hr>
+                            
+                            <p>shipping information:</p>
+                            <hr>
+                            Address: {{order.address}}</br>
+                            City : {{order.city}}</br>
+                            State : {{order.state}}</br>
+                            Zipcode : {{order.zipcode}}</br>
+                            Country : {{order.country}}</br>
+                            Order Date : {{order.date_added}}
+                        
+                        </div>
+                        <div class="col-sm">
+                            <hr>
+                            <p>User information:</p>
+                            <hr>
+                             First name: {{order.first_name}}</br>
+                             Last name: {{order.last_name}}</br>
+                             Email: {{order.email}}</br>
+                             Phone: {{order.phone_number}}</br></br>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+                <div class="col-sm">
+                  {% if order.shipped  %} Shipped at: {{order.shipping_date}} <i class="fa fa-check-circle-o text-success" aria-hidden="true"></i> 
+                  {% else %} Not shipped <i class="fa fa-times-circle text-warning" aria-hidden="true"></i> {% endif%}
+
+                </div>
+                <hr>
+                    <strong> Alter Shipping status here:</strong>
+                    </br>
+                    {{form}}
+                    </br>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+            
+            </form>
+        </div>
+       
+        <br>   
+    </div>
+
+    <div class="col-lg-6">
+        <div class="box-element">
+            <a  class="btn btn-outline-dark" href="{% url 'check_orders' %}">&#x2190; Back to check orders</a>
+            <hr>
+            <h3>Order id: {{order.id}}</h3>
+            <hr>
+
+            <div class="box-element">
+                    <div class="cart-row">
+                        <div style="flex:2"></div>
+                        <div style="flex:2"><strong>Product name:</strong></div>
+                        <div style="flex:1"><strong>Quantity:</strong></div>
+                        <div style="flex:1"><strong>Total price:</strong></div>
+                       
+                    </div>
+                </div>
+
+
+                 {% for orderitem in orderitems %}
+                <div class="cart-row">
+                   
+                    <div style="flex:2"><img class="row-image" src="{{orderitem.item.imageURL}}"></div>
+                    <div style="flex:2"><p>{{orderitem.item.title}}</p></div>
+                    <div style="flex:1"><p>{{orderitem.quantity}}</p></div>
+                    <div style="flex:1"><p>{{orderitem.total}}</p></div>
+                    
+                    
+                </div>
+                {% endfor  %}
+        </div>
+    </div>
+    
+</div>
+{% endif %}
+
+{% endblock content %}

@@ -1,0 +1,206 @@
+{%  extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+
+
+
+<div class="card mb-3" style="max-width: 1080px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="{{product.imageURL}}" class="img-fluid rounded-start thumbnail" alt="...">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">{{product.title}}
+
+       <div class="my-4 d-flex justify-content-center small {% if product.averagerate < 3 %} text-danger {% elif product.averagerate < 4 %}text-warning {% elif product.averagerate < 5 %} 
+      text-info {% else %} text-success  {% endif%} mb-2">
+    <span>
+    
+        <i class="fa fa-star{% if product.averagerate < 0.5%}-o{% elif product.averagerate >= 0.5 and product.averagerate < 1 %}-half-o{% endif %}" aria-hidden="true"></i>
+        <i class="fa fa-star{% if product.averagerate < 1.5%}-o{% elif product.averagerate >= 1.5 and product.averagerate < 2 %}-half-o{% endif %}" aria-hidden="true"></i>
+        <i class="fa fa-star{% if product.averagerate < 2.5%}-o{% elif product.averagerate >= 2.5 and product.averagerate < 3 %}-half-o{% endif %}" aria-hidden="true"></i>
+        <i class="fa fa-star{% if product.averagerate < 3.5%}-o{% elif product.averagerate >= 3.5 and product.averagerate < 4 %}-half-o{% endif %}" aria-hidden="true"></i>
+        <i class="fa fa-star{% if product.averagerate < 4.5%}-o{% elif product.averagerate >= 4.5 and product.averagerate < 5 %}-half-o{% endif %}" aria-hidden="true"></i>
+    </span>
+   
+    </div>
+
+      <div class="d-flex justify-content-center small {% if product.averagerate < 3 %} text-danger {% elif product.averagerate < 4 %}text-warning {% elif product.averagerate < 5 %} 
+      text-info {% else %} text-success  {% endif%} mb-2">
+      <i>Rating:</i>
+      <strong>( {{ product.averagerate | stringformat:".2f" }}/5 )(
+        <i class="fa fa-user fa-sm"></i>
+        {{product.countrate}})</strong>                                             
+      </div>    
+        </h5>
+        <hr>
+        <p class="card-text">{{product.description}}</p>
+        <p class="card-text"> Price: {{product.price}} HUF</p>
+        <div class="row">
+      </div>
+    </div>
+      
+      <form method = "POST" action="{% url 'add_cart' product.slug  %}?next={{request.path}}">
+      {% csrf_token %}
+     <button type="submit" class="btn btn-outline-success">
+     <i class="fa fa-cart-plus" aria-hidden="true"></i>
+    </button>
+    {% if request.user.is_superuser %}
+    <a class="btn btn-outline-warning" href="{% url 'modify_product' product.slug %}"> 
+    <i class="fa fa-pencil" aria-hidden="true"></i>
+    </a>
+
+    <a class="btn btn-outline-danger" href="{% url 'delete_product' product.slug %}"> 
+    <i class="fa fa-trash" aria-hidden="true"></i>
+    </a>
+    {% endif %}
+     </form>
+     </br>
+
+
+  </div>
+</div>
+
+
+<div class="card text-white:" style="width: 100%;  background-color: #dfe9ee;">
+
+  <div class="card-body">
+    {% if not  rated  and request.user.is_authenticated%}
+    <i><h5 class="card-title text-center ">Rate This product</h5></i>
+    {% elif not rated and  not request.user.is_authenticated %}
+    <i><h5 class="card-title text-center ">You must login to send review and rate products</h5></i>
+    <div class="d-flex justify-content-center small mb-2">
+     
+          
+        <span>
+          {% for _ in ''|center:5 %}
+         <i class="fa fa-star-o" aria-hidden="true"></i>
+         {% endfor %}
+        </span>
+    </div>
+
+     
+    {% endif  %}
+    <p class="card-text">
+    <!-- start stars-->
+    {% if request.user.is_authenticated %}
+    <div class="d-flex justify-content-center small">
+        
+    
+		  <div class="stars">
+        <form method="POST" action="">
+        {% csrf_token %}
+
+          {% if not rated  %}
+          <input class="star star-5" id="star-5" type="radio" name="star" value="5"/>
+          <label class="star star-5" for="star-5"></label>
+          <input class="star star-4" id="star-4" type="radio" name="star" value="4"/>
+          <label class="star star-4" for="star-4"></label>
+          <input class="star star-3" id="star-3" type="radio" name="star" value="3"/>
+          <label class="star star-3" for="star-3"></label>
+          <input class="star star-2" id="star-2" type="radio" name="star" value="2"/>
+          <label class="star star-2" for="star-2"></label>
+          <input class="star star-1" id="star-1" type="radio" name="star" value="1"/>
+          <label class="star star-1" for="star-1"></label>
+          {% else%}
+          
+          <div class="d-flex justify-content-center small {% if rate_range < 3 %} text-danger {% elif rate_range < 4 %}text-warning {% elif rate_range < 5 %} 
+          text-info {% else %} text-success  {% endif %} mb-2">
+          <i>Your Rating:&nbsp;</i>
+          <span>
+      
+          <i class="fa fa-star{% if rate_range < 0.5%}-o{% elif rate_range >= 0.5 and rate_range < 1 %}-half-o{% endif %}" aria-hidden="true"></i>
+          <i class="fa fa-star{% if rate_range < 1.5%}-o{% elif rate_range >= 1.5 and rate_range < 2 %}-half-o{% endif %}" aria-hidden="true"></i>
+          <i class="fa fa-star{% if rate_range < 2.5%}-o{% elif rate_range >= 2.5 and rate_range < 3 %}-half-o{% endif %}" aria-hidden="true"></i>
+          <i class="fa fa-star{% if rate_range < 3.5%}-o{% elif rate_range >= 3.5 and rate_range < 4 %}-half-o{% endif %}" aria-hidden="true"></i>
+          <i class="fa fa-star{% if rate_range < 4.5%}-o{% elif rate_range >= 4.5 and rate_range < 5 %}-half-o{% endif %}" aria-hidden="true"></i>
+          </span>
+         
+        
+          </div>
+          
+          {% endif %}
+    
+
+      </div>
+
+            
+   
+
+
+    </div>
+    {% endif %}
+    <!-- end stars-->
+
+    </p>
+  </div>
+</div>
+
+    
+
+
+<hr>
+</br>
+
+<i><h4 class="nav-link text-center " href="">
+<i class="fa fa-comment" aria-hidden="true"></i>
+<span>Recent reviews ({{num_review}})</span>
+</h4></i>
+
+
+
+{% for  field in comments %}
+<div class="card">  
+  <div class="card-body">
+     <p class="fw-bold mb-1"><small><em class="text-primary">{{field.user.first_name}} {{field.user.last_name}}</em></small></p>
+    <p><i><small>{{field.comment_date}}<i/></small></p> 
+     <textarea   class="form-control" disabled> {{field.comment}} </textarea>  
+  </div>
+  
+</div>
+{% endfor %}
+</br>
+        <nav aria-label="Page navigation example">
+              <ul class="pagination">
+                {% if comments.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{comments.previous_page_number}}">Previous</a></li>
+                {% endif%}
+                {% for page  in comments.paginator.page_range %}
+                <li class="page-item"><a class="page-link" href="?page={{page}}">{{page}}</a></li>
+                {% endfor %}
+                {% if comments.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{comments.next_page_number}}">Next</a></li>
+                {% endif %}
+              </ul>
+        </nav>
+
+
+<div class="card" style="max-width: 1080px;">
+  <div class="card-body">
+    <blockquote class="blockquote mb-0">
+      <div class="w-100">
+                <h5>{% if request.user.is_authenticated%}Add a Review{% else %}You must login to add review{% endif %}</h5>
+                
+                <div data-mdb-input-init class="form-outline">
+                {% if request.user.is_authenticated%}
+                  <textarea   class="form-control" name="comment" rows="4"></textarea>
+                {% else %}
+                  <textarea   class="form-control" name="comment" rows="4" disabled></textarea>
+                {% endif %}
+                </div>
+                <div class="d-flex justify-content-between mt-3">
+                {% if request.user.is_authenticated%}
+                  <button  type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-success">Submit</button>
+                {% else %}
+                <button  type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-success" disabled>Submit</button>
+                {% endif %}
+                </div>
+              </div>
+              </form>
+    </blockquote>
+  </div>
+</div>
+
+{% endblock content %}

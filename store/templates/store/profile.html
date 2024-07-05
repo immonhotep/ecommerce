@@ -1,0 +1,108 @@
+{%  extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="box-element" id="form-wrapper">
+            <form method="POST" action="."  class="w-full">
+            {% csrf_token %}
+               
+                <div id="user-info">
+                <hr>
+                    <p>Enter user information:</p>
+                <hr>
+                {% for field in form %}
+                    <div class="form-field">
+                    <label>{{field.label}}:</label>
+                     {{field}}
+                    </div>
+                {% endfor  %}   
+                </div>
+                <hr>
+                    <div class="d-flex justify-content-end">
+                        <a class="btn btn-outline-info" href="{% url  'change_password' %}">Change Password</a>
+                   </div>
+                <hr>
+                 <button type="submit" class="btn btn-primary">Submit</button>
+                 <a  href={% url 'shipping' %} class="btn btn-outline-secondary">
+                 <i class="fa fa-truck" aria-hidden="true"></i>
+                 <span>shipping</span>
+                 </a>
+            </form>
+        </div>
+        
+
+        <br>   
+    </div>
+
+       
+
+
+
+    <div class="col-lg-6">
+        <div class="box-element">
+            <a  class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
+            <hr>
+            <h3>Previously Ordered Products by: {{request.user}}</h3>
+            <hr>
+
+
+
+                 <div class="box-element">
+                    <div class="cart-row">
+                        <div style="flex:2"></div>
+                        <div style="flex:2"><strong>Order Time:</strong></div>
+                        <div style="flex:1"><strong>Price</strong></div>
+                        <div style="flex:1"><strong>Quantity</strong></div>
+                        <div style="flex:1"><strong>Status</strong></div>
+                    </div>
+                </div>
+                {% for order in orders %}
+                <div class="cart-row">
+                    
+                    <div style="flex:2"><img class="row-image" src="{{order.item.imageURL}}"></div>
+                    <div style="flex:2"><p>{{order.order.updated}} </p></div>
+                    <div style="flex:1"><p>{{order.total}}</p></div>
+                    <div  style="flex:1"><p>{{order.quantity}}</p></div>
+                    {% if order.order.shipped %}
+                    <div style="flex:1"><p><a href="{% url 'order_summary' order.order.order_id %}" class="text-success">
+                    <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+                    <span>Closed</span>
+                    
+                    </a></p></div>
+                    {% else %}
+                    <div style="flex:1"><p><a href="{% url 'order_summary' order.order.order_id  %}">
+                    <i class="fa fa-truck" aria-hidden="true"></i>
+                    <span>Shipping In Progress</span>
+                    </a></div>
+                    {% endif %}
+                    
+                </div>
+                {% endfor %}
+            <h5>Items: {{total_items}} </h5>
+            <h5>Total: {{total_price}} Huf</h5>
+        </div>
+    </div>
+</div>
+</br>
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-end ">
+    {% if orders.has_previous %}
+    <li class="page-item"><a class="page-link" href="?page={{orders.previous_page_number}}">Previous</a></li>
+    {% endif%}
+    {% for page  in orders.paginator.page_range %}
+    <li class="page-item"><a class="page-link" href="?page={{page}}">{{page}}</a></li>
+    {% endfor %}
+    {% if orders.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{orders.next_page_number}}">Next</a></li>
+    {% endif %}
+  </ul>
+</nav>
+
+
+
+
+
+</div>
+{% endblock content %}

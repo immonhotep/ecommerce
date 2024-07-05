@@ -1,0 +1,104 @@
+{%  extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        </br>
+        <div class="box-element">
+            <i><h3>Your Shopping Cart:</h3></i>
+            <hr>
+            <div class="cart-row">
+                <div style="flex:2"></div>
+                <div style="flex:2"><strong>Item</strong></div>
+                <div style="flex:1"><strong>Price</strong></div>
+                <div style="flex:1"><strong>Quantity</strong></div>
+                <div style="flex:1"><strong>Total</strong></div>
+            </div>
+            {% if request.user.is_authenticated %}   
+            {% for cart_item in cart_items %}
+            <div class="cart-row">
+                <div style="flex:2"><img class="row-image" src="{{ cart_item.item.imageURL}}"></div>
+                <div style="flex:2"><p></p>{{cart_item.item.title}}</div>
+                <div style="flex:1"><p>{{cart_item.item.price}} HUF</p></div>
+                <div style="flex:1"><p class="quantity">{{cart_item.quantity}}</p>
+                    
+                    <div class="quantity">
+                        
+                        <form method = "POST" action="{% url 'add_cart' cart_item.item.slug  %}?next={{request.path}}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-success btn-sm"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                        </form>
+                        
+                        <form method = "POST" action="{% url 'remove_cart' cart_item.item.slug %}?next={{request.path}}">
+                         {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-success btn-sm"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                       
+                        </form>
+                    </div>
+                </div>
+                <div style="flex:1"><p>{{cart_item.get_total}} HUF</p></div>
+            </div>    
+         {% endfor %}
+
+         {% else %}
+            {% for key,value in cart_items.items %}
+            <div class="cart-row">
+                <div style="flex:2"><img class="row-image" src="{{ key.imageURL}}"></div>
+                <div style="flex:2"><p></p>{{key.title}}</div>
+                <div style="flex:1"><p>{{key.price}} HUF</p></div>
+                <div style="flex:1"><p class="quantity">{{value}}</p>
+                    
+                    <div class="quantity">
+                    
+                        <form method = "POST" action="{% url 'add_cart' key.slug %}?next={{request.path}}">
+                        {% csrf_token %}
+                        <button type="submit"   class="btn btn-outline-success btn-sm"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                        </form>
+                        
+                        
+                        <form method = "POST" action="{% url 'remove_cart' key.slug %}?next={{request.path}}">
+                         {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-success btn-sm"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                       
+                        </form>
+                  
+
+
+        
+
+                    </div>
+                </div>
+                
+                <div style="flex:1"><p></p></div>
+            </div>    
+         {% endfor %}
+         {% endif  %}
+
+        </div>
+
+        
+        <div class="box-element">
+
+            <a  class="btn btn-outline-dark" href="{% url 'store' %}">&#x2190; Continue Shopping</a>
+
+            <br>
+            <br>
+            
+            <table class="table">
+                <tr>
+                
+                
+                    <th><h5>Items: <strong>{{total_items}}</strong></h5></th>
+                    <th><h5>Total:<strong> {{total_price}} Huf</strong></h5></th>
+                    <th>
+                        <a  style="float:right; margin:5px;" class="btn btn-success" href="{% url 'order' %}"> Let's buy it</a>
+                    </th>
+                </tr>
+            </table>
+            
+
+        </div>
+    </div>
+</div>
+                  
+{% endblock content %}

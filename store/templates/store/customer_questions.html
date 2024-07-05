@@ -1,0 +1,62 @@
+{%  extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+{% if request.user.is_authenticated %}
+<div class="card text-center">
+  <div class="card-header">
+    Featured
+  </div>
+  <form method="POST" >
+  {% csrf_token %}
+  <div class="card-body">
+    {% for item in  questions %}
+
+        <div class="card">
+          <div class="card-body">
+           <div class="form-check">
+              {% if item.answered %}
+              <input class="form-check-input bg-success" type="checkbox" value="" checked disabled> 
+              {% else %}
+              <input class="form-check-input" type="radio" name="Question_number" value={{item.id}}> 
+              {% endif %}
+              <label class="form-check-label" for="flexRadioDefault1">
+                    <p class="fw-bold mb-1"><small><em class="text-primary">Name: {{item.first_name}} {{item.last_name}}</em></small></p>
+                    <i><small>Email: {{item.email}}<i/></small>,
+                    <i><small>Date: {{item.question_date}}<i/></small>
+                    
+              </label>
+              <textarea   class="form-control" disabled> {{item.user_info}} </textarea> 
+              
+          </div> 
+          </div>
+        </div>
+        
+    {% endfor %} 
+  </br>
+  <nav aria-label="Page navigation example">
+  <ul class="pagination">
+    {% if questions.has_previous %}
+    <li class="page-item"><a class="page-link" href="?page={{questions.previous_page_number}}">Previous</a></li>
+    {% endif%}
+    {% for page  in questions.paginator.page_range %}
+    <li class="page-item"><a class="page-link" href="?page={{page}}">{{page}}</a></li>
+    {% endfor %}
+    {% if questions.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{questions.next_page_number}}">Next</a></li>
+    {% endif %}
+  </ul>
+  </nav>
+
+     Answer
+    <textarea   class="form-control" name="comment" rows="4"></textarea>
+    <button type="submit" class="btn btn-primary">Send Mail</button>
+  </div>
+  </form>
+</div>
+{% endif  %}
+
+
+
+
+{% endblock content %}

@@ -1,0 +1,179 @@
+{%  extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+{% if request.user.is_authenticated %}
+<div class="row">
+    
+    <div class="col-lg-6">
+        <div class="box-element" id="form-wrapper">
+            <form method="POST" action="."  class="w-full">
+            {% csrf_token %}
+               
+                <div id="user-info">
+                    <div class="row">
+                        <div class="col-sm">
+                            <hr>
+                            
+                            <p>shipping information:</p>
+                            <hr>
+                            Address: {{shipping_user.address}}</br>
+                            City : {{shipping_user.city}}</br>
+                            State : {{shipping_user.state}}</br>
+                            Zipcode : {{shipping_user.zipcode}}</br>
+                            Country : {{shipping_user.country}}</br>
+                            <hr>
+                            <a href = {% url 'shipping' %} class="btn btn-outline-secondary">
+                            <i class="fa fa-truck" aria-hidden="true"></i>
+                            <span>Shipping info</span>
+                            </a>
+                        </div>
+                        <div class="col-sm">
+                            <hr>
+                            <p>User information:</p>
+                            <hr>
+                             First name: {{user.first_name}}</br>
+                             Last name: {{user.last_name}}</br>
+                             Email: {{user.email}}</br>
+                             Phone: {{user.phone_number}}</br></br>
+                            <hr>
+                            <a href = {% url 'profile' %} class="btn btn-outline-secondary">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <span>User Info</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="card">
+                    <div class="card-body">
+                      <u> <p class="text-center"> Payment and Transportation:</p></u>
+                        {{payform}}
+                    </div>
+                </div>
+                </br>
+                
+                 <button type="submit" class="btn btn-primary">Send Order</button>
+            </form>
+        </div>
+        
+        <br>   
+    </div>
+
+    <div class="col-lg-6">
+        <div class="box-element">
+            <a  class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
+            <hr>
+            <h3>Order Summary for {{user}}</h3>
+            <hr>
+
+            <div class="box-element">
+                    <div class="cart-row">
+                        <div style="flex:2"></div>
+                        <div style="flex:2"><strong>Product name:</strong></div>
+                        <div style="flex:1"><strong>Quantity:</strong></div>
+                        <div style="flex:1"><strong>Total price:</strong></div>
+                       
+                    </div>
+                </div>
+
+
+                 {% for item in items %}
+                <div class="cart-row">
+                   
+                    <div style="flex:2"><img class="row-image" src="{{item.item.imageURL}}"></div>
+                    <div style="flex:2"><p>{{item.item.title}}</p></div>
+                    <div style="flex:1"><p>{{item.quantity}}</p></div>
+                    <div style="flex:1"><p>{{item.total}}</p></div>
+                    
+                    
+                </div>
+                {% endfor  %}
+            <h5>Items: {{total_items}} </h5>
+            <h5>Total: {{total_price}}  Huf</h5>
+        </div>
+    </div>
+    
+</div>
+{% else %}
+
+<div class="row">
+    
+    <div class="col-lg-6">
+        <div class="box-element" id="form-wrapper">
+            <form method="POST" action="."  class="w-full">
+            {% csrf_token %}
+               
+                <div id="user-info">
+                    <div class="row">
+                        <div class="col-sm">
+                            <hr>
+                            
+                            <p>shipping information:</p>
+                            <hr>
+                              {% for field in form%}
+
+                                <div class="form-field">
+                                <label>{{field.label}}</label>
+                                {{field}}
+                                </div>
+
+                            {% endfor %} 
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="card">
+                    <div class="card-body">
+                      <u> <p class="text-center"> Payment and Transportation:</p></u>
+                        {{payform}}
+                    </div>
+                </div>
+                </br>
+                
+                 <button type="submit" class="btn btn-primary">Send Order</button>
+            </form>
+        </div>
+        
+        <br>   
+    </div>
+
+    <div class="col-lg-6">
+        <div class="box-element">
+            <a  class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
+            <hr>
+            <h3>Order Summary for {{user}}</h3>
+            <hr>
+
+            <div class="box-element">
+                    <div class="cart-row">
+                        <div style="flex:2"></div>
+                        <div style="flex:2"><strong>Product name:</strong></div>
+                        <div style="flex:1"><strong>Quantity:</strong></div>
+                        <div style="flex:1"><strong>Total price:</strong></div>
+                       
+                    </div>
+                </div>
+
+
+                 {% for key,value in cart_items.items %}
+                <div class="cart-row">
+                   
+                    <div style="flex:2"><img class="row-image" src="{{key.imageURL}}"></div>
+                    <div style="flex:2"><p>{{key.title}}</p></div>
+                    <div style="flex:1"><p>{{value}}</p></div>
+                    <div style="flex:1"><p>{{total}}</p></div>
+                    
+                    
+                </div>
+                {% endfor  %}
+            <h5>Items: {{total_items}} </h5>
+            <h5>Total: {{total_price}}  Huf</h5>
+        </div>
+    </div>
+    
+</div>
+{% endif %}
+
+{% endblock content %}

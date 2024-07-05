@@ -1,0 +1,118 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navber-light bg-light" style="background-color: #0a4275;">
+            <div class="container px-4 px-lg-5">
+                {%  if request.user.is_authenticated %}
+                
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle navbar-brand" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                        <span>{{request.user}}</span>    
+                        </a>
+                        <ul class="dropdown-menu">
+                            
+                            <li><a class="dropdown-item" href="{% url 'shipping'  %}">
+                            <i class="fa fa-truck" aria-hidden="true"></i>
+                            <span>Shipping</span>
+                            </a></li>
+                             <li><a class="dropdown-item" href="{% url 'profile' %}">
+                             <i class="fa fa-user" aria-hidden="true"></i>
+                            <span>Profile</span>
+                             </a></li>
+                             <li><a class="dropdown-item" href="{% url 'change_password' %}">
+                             <i class="fa fa-key" aria-hidden="true"></i>
+                            <span>Change Password</span>
+                             
+                             </a></li>
+                             <li><a class="dropdown-item" href="{% url 'logout'  %}">
+                            <i class="fa fa-sign-out" aria-hidden="true"></i>
+                            <span>Log out</span>
+                            </a></li>
+                          
+                        </ul>
+                    </li>
+
+
+
+
+                {% endif  %}
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'store' %}">
+                        <i class="fa fa-home" aria-hidden="true"></i>
+                        <span>Home</span>
+                        </a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">
+                        <i class="fa fa-info" aria-hidden="true"></i>
+                        <span>About</span>
+                        </a></li>
+                         <li class="nav-item"><a class="nav-link" href="{% url 'category' %}">
+                        <i class="fa fa-list" aria-hidden="true"></i>
+                        <span>Categories</span>
+                        </a></li>
+
+                            <li class="nav-item"><a class="nav-link" href="{% url 'search'%}">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                            <span>Search</span>
+                            </a></li>
+
+
+                        {%  if request.user.is_superuser %}                         
+                                <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle navbar-brand" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-lock" aria-hidden="true"></i>
+
+                                <span>Admin Panel</span>    
+                                </a>
+                                <ul class="dropdown-menu">
+                                    
+                                    <li class="nav-item"><a class="nav-link" href="{% url 'check_orders'%}">
+                                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                    <span>Check Orders</span>
+                                    </a></li>
+                                
+                                    <li><a class="dropdown-item" href="{% url 'add_new_category' %}">
+                                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+
+                                    <span>Add New Category</span>
+                                    </a></li>
+
+                                    <li><a class="dropdown-item" href="{% url 'add_new_product' %}">
+                                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+
+                                    <span>Add New Product</span>
+                                    </a></li>
+
+                                    <li><a class="dropdown-item" href="{% url 'check_questions' %}">
+                                    <i class="fa fa-question-circle-o" aria-hidden="true"></i>
+
+                                    <span>Check Customer Questions</span>
+                                    </a></li>
+                                
+                                </ul>
+                            </li>
+                        {% endif  %}
+
+                            {%if request.user.is_authenticated %}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'logout'%}">
+                            <i class="fa fa-sign-out" aria-hidden="true"></i>
+                            <span>Logout</span>
+                            </a></li>
+                            {% else%}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'login'%}">
+                            <i class="fa fa-sign-in" aria-hidden="true"></i>
+                            <span>Login</span>
+                            </a></li>     
+                            {% endif %}
+   
+                    </ul>
+                    <div class="d-flex">
+                        <a class="btn btn-outline-dark" href={% url  'cart' %}>
+                            <i class="bi-cart-fill me-1"></i>
+                            Cart
+                            <span class="badge bg-dark text-white ms-1 rounded-pill">{{request.session.cart_num}}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>

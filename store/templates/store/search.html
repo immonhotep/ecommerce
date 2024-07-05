@@ -1,0 +1,117 @@
+{%  extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+
+
+
+
+
+<div class="row">
+
+<div class="card text-center border border-dark bg-light " style="width: 1200px;">
+  <div class="card-body">
+  <form method="POST" action="">
+  {% csrf_token %}
+    <h5 class="card-title">Search</h5>
+    <input type="search" name="search" class="form-control" placeholder="Search query" aria-label="Search" />
+    <hr>
+          
+
+<div class="rounded-lg p-4 shadow-lg" style="max-width:100%">
+  <div class="p-4">
+  
+    <i><span>Search above:</span></i>
+    <i><span >{{priceMin}}</span></i>
+    <input class="form-range" type="range" name="price_value" value="{{priceMin}}" min="{{priceMin}}" max="{{priceMax}}" oninput="this.previousElementSibling.innerText=this.value"/>
+    <div class="row">
+     <div class="col-sm-6"><p class="float-start">{{priceMin}}</p></div>  
+     <div class="col-sm-6"><p class="float-end">{{priceMax}}</p></div>  
+   </div>
+
+  </div>
+</div>
+
+
+<!-- test range slider-->
+
+
+
+<!--end test range slider -->
+
+
+      </br>
+    <button type="submit" class="btn btn-primary">search</a>
+  </form>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+  {%  for product in searching %}
+  <div class="card" style="width: 400px;">
+    <img src="{{product.imageURL}}" class="card-img-top thumbnail" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">{{product.title}}</h5>
+      <hr>
+      <p class="card-text">{{product.subtitle|truncatechars:50}}</p>
+      <form method = "POST" action="{% url 'add_cart' product.slug  %}?next={{request.path}}">
+        {% csrf_token %}
+      <button type="submit" class="btn btn-outline-success">
+      <i class="fa fa-cart-plus" aria-hidden="true"></i>
+      </button>
+      <a class="btn btn-outline-success" href="{% url 'product' product.slug %}">
+      <i class="fa fa-info" aria-hidden="true"></i>
+      </a>
+      {% if request.user.is_superuser %}
+      <a class="btn btn-outline-warning" href="{% url 'modify_product' product.slug %}"> 
+      <i class="fa fa-pencil" aria-hidden="true"></i>
+      </a>
+
+      <a class="btn btn-outline-danger" href="{% url 'delete_product' product.slug %}"> 
+      <i class="fa fa-trash" aria-hidden="true"></i>
+      </a>
+      {% endif %}
+
+      <strong style="display: inline-block; float: right"><h4>{{product.price}} Huf</h4></strong>
+      </form>
+
+      <div class="my-4 d-flex justify-content-center small {% if product.averagerate < 3 %} text-danger {% elif product.averagerate < 4 %}text-warning {% elif product.averagerate < 5 %} 
+        text-info {% else %} text-success  {% endif%} mb-2">
+      <span>
+    
+          <i class="fa fa-star{% if product.averagerate < 0.5%}-o{% elif product.averagerate >= 0.5 and product.averagerate < 1 %}-half-o{% endif %}" aria-hidden="true"></i>
+          <i class="fa fa-star{% if product.averagerate < 1.5%}-o{% elif product.averagerate >= 1.5 and product.averagerate < 2 %}-half-o{% endif %}" aria-hidden="true"></i>
+          <i class="fa fa-star{% if product.averagerate < 2.5%}-o{% elif product.averagerate >= 2.5 and product.averagerate < 3 %}-half-o{% endif %}" aria-hidden="true"></i>
+          <i class="fa fa-star{% if product.averagerate < 3.5%}-o{% elif product.averagerate >= 3.5 and product.averagerate < 4 %}-half-o{% endif %}" aria-hidden="true"></i>
+          <i class="fa fa-star{% if product.averagerate < 4.5%}-o{% elif product.averagerate >= 4.5 and product.averagerate < 5 %}-half-o{% endif %}" aria-hidden="true"></i>
+      </span>
+    
+      </div>
+
+        <div class="d-flex justify-content-center small {% if product.averagerate < 3 %} text-danger {% elif product.averagerate < 4 %}text-warning {% elif product.averagerate < 5 %} 
+        text-info {% else %} text-success  {% endif%} mb-2">
+        <i>Rating:</i>
+        <strong>( {{ product.averagerate | stringformat:".2f" }}/5 )</strong>                                             
+        </div>
+    
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+
+
+
+
+
+
+
+
+{% endblock content %}
+
